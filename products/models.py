@@ -2,20 +2,16 @@ import os
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from PIL import Image
 from uuid import uuid4
 
 
 def path_to_rename(instance, filename):
     upload_to = 'product_images'
     ext = filename.split('.')[-1]
-    # get filename
     if instance.pk:
         filename = '{}_{}.{}'.format(instance.pk, instance.product_name, ext)
     else:
-        # set filename as random string
         filename = '{}.{}'.format(uuid4().hex, ext)
-    # return the whole path to the file
     return os.path.join(upload_to, filename)
 
 
