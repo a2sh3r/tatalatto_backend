@@ -16,6 +16,14 @@ def path_to_rename(instance, filename):
     return os.path.join(upload_to, filename)
 
 
+class ProductType(models.TextChoices):
+    CAKE = "1", 'CAKE'
+    MARSHMALLOW = "2", "MARSHMALLOW"
+    TRIFLE = "3", "TRIFLE"
+    GINGER = "4", "GINGER"
+    CUPCAKE = "5", "CUPCAKE"
+
+
 class Product(models.Model):
     product_name = models.CharField(null=False, blank=False, max_length=100)
     price = models.IntegerField(null=True, blank=True)
@@ -33,7 +41,14 @@ class Product(models.Model):
 
 
 class Cake(Product):
-    cake_topping = models.CharField()
+    cake_topping = models.CharField(null=True, blank=True)
+    product_type = models.CharField(
+        max_length=2,
+        null=True,
+        blank=True,
+        choices=ProductType.choices,
+        default=ProductType.CAKE
+    )
 
     def set_topping(self, x):
         self.cake_topping = json.dumps(x)
@@ -48,7 +63,14 @@ class Cake(Product):
 
 
 class Trifle(Product):
-    trifle_topping = models.CharField()
+    trifle_topping = models.CharField(null=True, blank=True)
+    product_type = models.CharField(
+        max_length=2,
+        null=True,
+        blank=True,
+        choices=ProductType.choices,
+        default=ProductType.TRIFLE
+    )
 
     def set_topping(self, x):
         self.trifle_topping = json.dumps(x)
@@ -63,6 +85,14 @@ class Trifle(Product):
 
 
 class Marshmallow(Product):
+    product_type = models.CharField(
+        max_length=2,
+        null=True,
+        blank=True,
+        choices=ProductType.choices,
+        default=ProductType.MARSHMALLOW
+    )
+
     class Meta:
         verbose_name = _("marshmallow")
         verbose_name_plural = _("marshmallows")
@@ -70,6 +100,14 @@ class Marshmallow(Product):
 
 
 class Ginger(Product):
+    product_type = models.CharField(
+        max_length=2,
+        null=True,
+        blank=True,
+        choices=ProductType.choices,
+        default=ProductType.GINGER
+    )
+
     class Meta:
         verbose_name = _("ginger")
         verbose_name_plural = _("gingers")
@@ -77,6 +115,14 @@ class Ginger(Product):
 
 
 class Cupcake(Product):
+    product_type = models.CharField(
+        max_length=2,
+        null=True,
+        blank=True,
+        choices=ProductType.choices,
+        default=ProductType.CUPCAKE
+    )
+
     class Meta:
         verbose_name = _("cupcake")
         verbose_name_plural = _("cupcakes")
