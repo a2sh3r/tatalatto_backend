@@ -25,7 +25,7 @@ class ProductType(models.TextChoices):
 
 
 class Product(models.Model):
-    product_name = models.CharField(null=False, blank=False, max_length=100)
+    product_name = models.CharField(null=False, blank=False, max_length=100, db_index=True, unique=True)
     price = models.IntegerField(null=True, blank=True)
     product_image = models.ImageField(default='default-product.png', upload_to=path_to_rename)
     product_description = models.TextField(null=True, blank=True)
