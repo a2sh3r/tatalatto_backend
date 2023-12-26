@@ -1,6 +1,8 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
+from django.urls import reverse
 
-from products.models import Cake, ProductType, Trifle, Marshmallow, Ginger, Cupcake
+from products.models import Cake, ProductType, Trifle, Marshmallow, Ginger, Cupcake, Product
 
 
 class CakeModelTests(TestCase):
@@ -223,7 +225,140 @@ class CupcakeModelTests(TestCase):
         saved_cupcake = Cupcake.objects.all()
         self.assertEqual(saved_cupcake.count(), 2)
 
-        first_saved_cupcake = saved_cupcake[saved_cupcake.count()-1]
-        second_saved_cupcake = saved_cupcake[saved_cupcake.count()-2]
+        first_saved_cupcake = saved_cupcake[saved_cupcake.count() - 1]
+        second_saved_cupcake = saved_cupcake[saved_cupcake.count() - 2]
         self.assertEqual(first_saved_cupcake.product_name, 'test-case-cupcake-unique')
         self.assertEqual(second_saved_cupcake.price, 29991)
+
+
+class ProductViewTests(TestCase):
+    """ Тест для представлений Product"""
+
+    def test_product_list_view(self):
+        Marshmallow1 = Product.objects.create(
+            product_name="test-case-marshmallow",
+            price='2999',
+            product_description='9.99',
+            product_ingredients='Test text for ingredients',
+        )
+
+        Marshmallow2 = Product.objects.create(
+            product_name="test-case-marshmallow2",
+            price='2999',
+            product_description='9.99',
+            product_ingredients='Test text for ingredients',
+        )
+
+        user = User.objects.create_user(username='testuser', password='testpassword')
+        user.is_staff = True
+        user.save()
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('products:product-view'))
+        self.assertIn('test-case-marshmallow2', response.content.decode())
+
+
+class CakesViewTests(TestCase):
+    """ Тест для представлений Cake"""
+
+    def test_cake_list_view(self):
+        Marshmallow1 = Cake.objects.create(
+            product_name="test-case-marshmallow",
+            price='2999',
+            product_description='9.99',
+            product_ingredients='Test text for ingredients',
+            cake_topping=" ",
+            product_type=ProductType.CAKE,
+        )
+
+        user = User.objects.create_user(username='testuser', password='testpassword')
+        user.is_staff = True
+        user.save()
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('products:cake-view'))
+        self.assertIn('test-case-marshmallow', response.content.decode())
+
+
+class CupcakesViewTests(TestCase):
+    """ Тест для представлений Cake"""
+
+    def test_cupcake_list_view(self):
+        Marshmallow1 = Cupcake.objects.create(
+            product_name="test-case-marshmallow",
+            price='2999',
+            product_description='9.99',
+            product_ingredients='Test text for ingredients',
+            product_type=ProductType.CUPCAKE,
+        )
+
+        user = User.objects.create_user(username='testuser', password='testpassword')
+        user.is_staff = True
+        user.save()
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('products:cupcake-view'))
+        self.assertIn('test-case-marshmallow', response.content.decode())
+
+
+class GingerViewTests(TestCase):
+    """ Тест для представлений Cake"""
+
+    def test_ginger_list_view(self):
+        Marshmallow1 = Ginger.objects.create(
+            product_name="test-case-marshmallow",
+            price='2999',
+            product_description='9.99',
+            product_ingredients='Test text for ingredients',
+            product_type=ProductType.GINGER,
+        )
+
+        user = User.objects.create_user(username='testuser', password='testpassword')
+        user.is_staff = True
+        user.save()
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('products:ginger-view'))
+        self.assertIn('test-case-marshmallow', response.content.decode())
+
+
+class TriflesViewTests(TestCase):
+    """ Тест для представлений Cake"""
+
+    def test_trifle_list_view(self):
+        Marshmallow1 = Trifle.objects.create(
+            product_name="test-case-marshmallow",
+            price='2999',
+            product_description='9.99',
+            product_ingredients='Test text for ingredients',
+            product_type=ProductType.TRIFLE,
+        )
+
+        user = User.objects.create_user(username='testuser', password='testpassword')
+        user.is_staff = True
+        user.save()
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('products:trifle-view'))
+        self.assertIn('test-case-marshmallow', response.content.decode())
+
+
+class MarshmallowsViewTests(TestCase):
+    """ Тест для представлений Cake"""
+
+    def test_marshmallow_list_view(self):
+        Marshmallow1 = Marshmallow.objects.create(
+            product_name="test-case-marshmallow",
+            price='2999',
+            product_description='9.99',
+            product_ingredients='Test text for ingredients',
+            product_type=ProductType.MARSHMALLOW,
+        )
+
+        user = User.objects.create_user(username='testuser', password='testpassword')
+        user.is_staff = True
+        user.save()
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('products:marshmallow-view'))
+        self.assertIn('test-case-marshmallow', response.content.decode())
